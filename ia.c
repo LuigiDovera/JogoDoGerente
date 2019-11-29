@@ -1,15 +1,29 @@
+//https://github.com/amirbawab/Hungarian-Algorithm/blob/master/Hungarian.java
+//http://www.hungarianalgorithm.com/examplehungarianalgorithm.php
+
 //Arquivo deve ser transformado em header
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 
-int* minimo(int**, int, int);
+int _tamanho, _numeroLinhas;
 
-int main() 
+typedef struct
 {
+    int resultado, *atribuicoes;
+}Jogada;
 
+Jogada jogadaAutomatica(int **matrizOriginal, int tamanho, int nivel) 
+{
+    Jogada jogada = {.resultado = -1, .atribuicoes = NULL};
+    jogada.atribuicoes = (int*)malloc(tamanho * sizeof(int));
+    if(jogada.atribuicoes == NULL) {
+        printf("Erro_4");
+        return jogada;
+    }
 
-    return 0;
+    int tabela[tamanho][tamanho];
+    memcpy(tabela, matrizOriginal, tamanho*tamanho*sizeof(int));
 }
 
 int* minimo(int **matriz, int tamanho, int modo)
