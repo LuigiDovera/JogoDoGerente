@@ -2,9 +2,11 @@
 #define FALSE 0
 
 int _tamanho;
-int **_valores;
-int _numLinhas;
-int **_retas;
+int **_valores = NULL;
+int _numRetas;
+int **_retas = NULL;
+int *_linhas = NULL;
+int *_colunasOcupadas = NULL;
 
 typedef struct
 {
@@ -28,52 +30,75 @@ int** alocaMatrizQuadrada(int tamanho) {
     return ptrM;
 }
 
-void copia_valores(int**, int**);
+int* alocaVetor(int tamanho) {
+    int *ptrV=NULL, i;
+    ptrV = (int*)malloc(tamanho * sizeof(int));
+    if(ptrV == NULL) {
+        printf("Erro_6");
+        return alocaVetor(tamanho);
+    }
+    return ptrV;
+}
+
+void copiaMatriz(int**, int**);
 void subtraiMinimoLinha();
 void subtraiMinimoColuna();
 void cobreZeros();
 int direcao(int, int);
 void coloreVizinhos(int, int, int);
 void criaZerosExtras();
-int otimiza(int*, int*, int);
+int otimiza(int);
 
-Jogada jogadaAutomatica(int **_valoresOriginal, int tamanho, int nivel)
+Jogada jogadaAutomatica(int **matrizOriginal, int tamanho, int nivel)
 {
+    int i;
+
     _tamanho = tamanho;
     Jogada jogada = {.resultado = -1, .atribuicoes = NULL};
-    _valores = alocaMatrizQuadrada(_tamanho);
-    _numLinhas = 0;
-    _retas = alocaMatrizQuadrada(_tamanho);
-    int linhas[_tamanho], colunasOcupadas[_tamanho], i;
-
     jogada.atribuicoes = (int*)malloc(_tamanho * sizeof(int));
     if(jogada.atribuicoes == NULL) {
         printf("Erro_4");
         return jogada;
     }
-    copia_valores(_valores, _valoresOriginal);
+    _valores = alocaMatrizQuadrada(_tamanho);
+    _numRetas = 0;
+    _linhas = alocaVetor(_tamanho);
+    _colunasOcupadas = alocaVetor(_tamanho);
+    for(i=0; i < _tamanho; i++) {
+        _colunasOcupadas[i] = 0;
+    }
+
+    copiaMatriz(_valores, matrizOriginal);
     subtraiMinimoLinha();
     subtraiMinimoColuna();
     cobreZeros();
-    while(_numLinhas < _tamanho) {
+    while(_numRetas < _tamanho) {
         criaZerosExtras();
         cobreZeros();
     }
-    otimiza(linhas, colunasOcupadas, 0);
-    jogada.atribuicoes = linhas;
+    otimiza(0);
+
+    jogada.atribuicoes = _linhas;
     for(i=0; i < _tamanho; i++) {
-        //jogada.resultado += _valoresOriginal[i][linhas[i]];
+        jogada.resultado += matrizOriginal[i][_linhas[i]];
+    }
+    jogada.resultado++;
+
+    for(i=0; i < _tamanho; i++) {
+        free(_retas[i]);
+        free(_valores[i]);
     }
     free(_retas);
     free(_valores);
+    free(_colunasOcupadas);
     return jogada; 
 }
 
-void copia_valores(int **destino, int **origem)
+void copiaMatriz(int **destino, int **origem)
 {
     int i, j;
-    for(i=0; i < sizeof(origem[0])/sizeof(int); i++) {
-        for(j=0; j < sizeof(origem[0])/sizeof(int); j++) {
+    for(i=0; i < _tamanho; i++) {
+        for(j=0; j < _tamanho; j++) {
             destino[i][j] = origem[i][j];
         }
     }
@@ -119,7 +144,12 @@ void cobreZeros()
 {
     int i, j;
 
-    _numLinhas = 0;
+    _numRetas = 0;
+    if(_retas != NULL) { 
+        free(_retas);
+        _retas = NULL;
+    }
+    _retas = alocaMatrizQuadrada(_tamanho);
     for(i=0; i < _tamanho; i++) {
         for(j=0; j < _tamanho; j++) {
             if(_valores[i][j] == 0)
@@ -157,7 +187,7 @@ void coloreVizinhos(int linha, int coluna, int direcao)
         else
             _retas[linha][i] = _retas[linha][i] == 1 || _retas[linha][i] == 2 ? 2 : -1;
     }
-    _numLinhas++;
+    _numRetas++;
 }
 
 void criaZerosExtras()
@@ -181,20 +211,20 @@ void criaZerosExtras()
     }
 }
 
-int otimiza(int *linhas, int *colunasOcupadas, int linha)
+int otimiza(int linha)
 {
     int j;
 
-    if(linha == sizeof(linhas)/sizeof(int))
+    if(linha == _tamanho)
         return TRUE;
 
     for(j=0; j < _tamanho; j++) {
-        if(_valores[linha][j] == 0 && colunasOcupadas[j] == 0) {
-            linhas[linha] = j;
-            colunasOcupadas[j] = 1;
-            if(otimiza(linhas, colunasOcupadas, linha+1))
+        if(_valores[linha][j] == 0 && _colunasOcupadas[j] == 0) {
+            _linhas[linha] = j;
+            _colunasOcupadas[j] = 1;
+            if(otimiza(linha+1))
                 return TRUE;
-            colunasOcupadas[j] = 0;
+            _colunasOcupadas[j] = 0;
         }
     }
     return FALSE;
