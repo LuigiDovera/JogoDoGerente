@@ -2,6 +2,9 @@
 #define FALSE 0
 
 int _tamanho;
+int **_valores;
+int _numLinhas;
+int **_retas;
 
 typedef struct
 {
@@ -25,51 +28,48 @@ int** alocaMatrizQuadrada(int tamanho) {
     return ptrM;
 }
 
-void copiaMatriz(int**, int**);
-void subtraiMinimoLinha(int**);
-void subtraiMinimoColuna(int**);
-int** cobreZeros(int**, int*);
-int direcao(int**, int, int);
-void coloreVizinhos(int**, int**, int*, int, int, int);
-void criaZerosExtras(int**, int **);
-int otimiza(int**, int*, int*, int);
+void copia_valores(int**, int**);
+void subtraiMinimoLinha();
+void subtraiMinimoColuna();
+void cobreZeros();
+int direcao(int, int);
+void coloreVizinhos(int, int, int);
+void criaZerosExtras();
+int otimiza(int*, int*, int);
 
-Jogada jogadaAutomatica(int **matrizOriginal, int tamanho, int nivel)
+Jogada jogadaAutomatica(int **_valoresOriginal, int tamanho, int nivel)
 {
     _tamanho = tamanho;
     Jogada jogada = {.resultado = -1, .atribuicoes = NULL};
-    int **valores = alocaMatrizQuadrada(_tamanho);
-    int aux0=0, aux1;
-    int *numLinhas = &aux0;
-    int **retas = alocaMatrizQuadrada(_tamanho);
-    int linhas[_tamanho], colunasOcupadas[_tamanho];
+    _valores = alocaMatrizQuadrada(_tamanho);
+    _numLinhas = 0;
+    _retas = alocaMatrizQuadrada(_tamanho);
+    int linhas[_tamanho], colunasOcupadas[_tamanho], i;
 
     jogada.atribuicoes = (int*)malloc(_tamanho * sizeof(int));
     if(jogada.atribuicoes == NULL) {
         printf("Erro_4");
         return jogada;
     }
-    copiaMatriz(valores, matrizOriginal);
-    printf("aaaa");
-    subtraiMinimoLinha(valores);
-    subtraiMinimoColuna(valores);
-    copiaMatriz(retas, cobreZeros(valores, numLinhas));
-    while(*numLinhas < _tamanho) {
-        criaZerosExtras(valores, retas);
-        copiaMatriz(retas, cobreZeros(valores, numLinhas));
+    copia_valores(_valores, _valoresOriginal);
+    subtraiMinimoLinha();
+    subtraiMinimoColuna();
+    cobreZeros();
+    while(_numLinhas < _tamanho) {
+        criaZerosExtras();
+        cobreZeros();
     }
-    otimiza(valores, linhas, colunasOcupadas, 0);
-    
+    otimiza(linhas, colunasOcupadas, 0);
     jogada.atribuicoes = linhas;
-    for(aux1=0; aux1 < _tamanho; aux1++) {
-        jogada.resultado += matrizOriginal[aux1][linhas[aux1]];
+    for(i=0; i < _tamanho; i++) {
+        //jogada.resultado += _valoresOriginal[i][linhas[i]];
     }
-    free(retas);
-    free(valores);
+    free(_retas);
+    free(_valores);
     return jogada; 
 }
 
-void copiaMatriz(int **destino, int **origem)
+void copia_valores(int **destino, int **origem)
 {
     int i, j;
     for(i=0; i < sizeof(origem[0])/sizeof(int); i++) {
@@ -79,110 +79,109 @@ void copiaMatriz(int **destino, int **origem)
     }
 }
 
-void subtraiMinimoLinha(int **matriz)
+void subtraiMinimoLinha()
 {
     int menores[_tamanho], i, j;
     for(i=0; i < _tamanho; i++) {
-        menores[i] = matriz[i][0];
+        menores[i] = _valores[i][0];
         for(j=1; j < _tamanho; j++) {
-            if(matriz[i][j] < menores[i])
-                menores[i] = matriz[i][j];
+            if(_valores[i][j] < menores[i])
+                menores[i] = _valores[i][j];
         }
     }
 
     for(i=0; i < _tamanho; i++) {
         for(j=0; j < _tamanho; j++) {
-            matriz[i][j] -= menores[i];
+            _valores[i][j] -= menores[i];
         }
     }
 }
 
-void subtraiMinimoColuna(int **matriz)
+void subtraiMinimoColuna()
 {
     int menores[_tamanho], i, j;
     for(j=0; j < _tamanho; j++) {
-        menores[j] = matriz[0][j];
+        menores[j] = _valores[0][j];
         for(i=1; i < _tamanho; i++) {
-            if(matriz[i][j] < menores[j])
-                menores[j] = matriz[i][j];
+            if(_valores[i][j] < menores[j])
+                menores[j] = _valores[i][j];
         }
     }
 
     for(j=0; j < _tamanho; j++) {
         for(i=0; i < _tamanho; i++) {
-            matriz[i][j] -= menores[j];
+            _valores[i][j] -= menores[j];
         }
     }
 }
 
-int** cobreZeros(int **matriz, int *numLinhas)
+void cobreZeros()
 {
-    int **retas= alocaMatrizQuadrada(_tamanho), i, j;
+    int i, j;
 
-    *numLinhas = 0;
+    _numLinhas = 0;
     for(i=0; i < _tamanho; i++) {
         for(j=0; j < _tamanho; j++) {
-            if(matriz[i][j] == 0)
-                coloreVizinhos(matriz, retas, numLinhas, i, j, direcao(matriz, i, j));
+            if(_valores[i][j] == 0)
+                coloreVizinhos(i, j, direcao(i, j));
         }
     }
-    return retas;
 }
 
-int direcao(int **matriz, int linha, int coluna)
+int direcao(int linha, int coluna)
 {
     int resultado=0, i;
     for(i=0; i < _tamanho; i++) {
-        if(matriz[i][coluna] == 0)
+        if(_valores[i][coluna] == 0)
             resultado++;
-        if(matriz[linha][i] == 0)
+        if(_valores[linha][i] == 0)
             resultado--;
     }
     return resultado;
 }
 
-void coloreVizinhos(int **matriz, int **retas, int *numLinhas, int linha, int coluna, int direcao)
+void coloreVizinhos(int linha, int coluna, int direcao)
 {
     int i;
 
-    if(retas[linha][coluna] == 2)
+    if(_retas[linha][coluna] == 2)
         return;
-    if(direcao > 0 && retas[linha][coluna] == 1)
+    if(direcao > 0 && _retas[linha][coluna] == 1)
         return;
-    if(direcao <= 0 && retas[linha][coluna] == -1)
+    if(direcao <= 0 && _retas[linha][coluna] == -1)
         return;
 
     for(i=0; i < _tamanho; i++) {
         if(direcao > 0)
-            retas[i][coluna] = retas[i][coluna] == -1 || retas[i][coluna] == 2 ? 2 : 1;
+            _retas[i][coluna] = _retas[i][coluna] == -1 || _retas[i][coluna] == 2 ? 2 : 1;
         else
-            retas[linha][i] = retas[linha][i] == 1 || retas[linha][i] == 2 ? 2 : -1;
+            _retas[linha][i] = _retas[linha][i] == 1 || _retas[linha][i] == 2 ? 2 : -1;
     }
-    *numLinhas++;
+    _numLinhas++;
 }
 
-void criaZerosExtras(int** matriz, int **retas)
+void criaZerosExtras()
 {
     int minNaoCoberto=0, i, j;
 
     for(i=0; i < _tamanho; i++) {
         for(j=0; j < _tamanho; j++) {
-            if(retas[i][j] == 0 && (matriz[i][j] < minNaoCoberto || minNaoCoberto == 0))
-                minNaoCoberto = matriz[i][j];
+            if(_retas[i][j] == 0 && (_valores[i][j] < minNaoCoberto || minNaoCoberto == 0))
+                minNaoCoberto = _valores[i][j];
         }
     }
 
     for(i=0; i < _tamanho; i++) {
         for(j=0; j < _tamanho; j++) {
-            if(retas[i][j] == 0)
-                matriz[i][j] -= minNaoCoberto;
-            else if(retas[i][j] == 2)
-                matriz[i][j] += minNaoCoberto;
+            if(_retas[i][j] == 0)
+                _valores[i][j] -= minNaoCoberto;
+            else if(_retas[i][j] == 2)
+                _valores[i][j] += minNaoCoberto;
         }
     }
 }
 
-int otimiza(int **matriz, int *linhas, int *colunasOcupadas, int linha)
+int otimiza(int *linhas, int *colunasOcupadas, int linha)
 {
     int j;
 
@@ -190,10 +189,10 @@ int otimiza(int **matriz, int *linhas, int *colunasOcupadas, int linha)
         return TRUE;
 
     for(j=0; j < _tamanho; j++) {
-        if(matriz[linha][j] == 0 && colunasOcupadas[j] == 0) {
+        if(_valores[linha][j] == 0 && colunasOcupadas[j] == 0) {
             linhas[linha] = j;
             colunasOcupadas[j] = 1;
-            if(otimiza(matriz, linhas, colunasOcupadas, linha+1))
+            if(otimiza(linhas, colunasOcupadas, linha+1))
                 return TRUE;
             colunasOcupadas[j] = 0;
         }
