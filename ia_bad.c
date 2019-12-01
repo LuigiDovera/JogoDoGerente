@@ -5,68 +5,31 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include "ia.h"
 
-int _tamanho, _numeroLinhas;
-
-typedef struct
-{
-    int resultado, *atribuicoes;
-}Jogada;
-
-Jogada jogadaAutomatica(int **matrizOriginal, int tamanho, int nivel) 
-{
-    Jogada jogada = {.resultado = -1, .atribuicoes = NULL};
-    jogada.atribuicoes = (int*)malloc(tamanho * sizeof(int));
-    if(jogada.atribuicoes == NULL) {
-        printf("Erro_4");
-        return jogada;
+int main() {
+    int **m = alocaMatrizQuadrada(4);
+    m[1][1] = 82;
+    m[1][2] = 83;
+    m[1][3] = 69;
+    m[1][4] = 92;
+    m[2][1] = 77;
+    m[2][2] = 37;
+    m[2][3] = 49;
+    m[2][4] = 92;
+    m[3][1] = 11;
+    m[3][2] = 69;
+    m[3][3] = 5;
+    m[3][4] = 86;
+    m[4][1] = 8;
+    m[4][2] = 9;
+    m[4][3] = 98;
+    m[4][4] = 23;
+    Jogada jo;
+    printf("aaaa");
+    jo = jogadaAutomatica(m, 4, 1);
+    printf("%d", jo.resultado);
+    for(int i=0; i < 4; i++) {
+        printf("%d", jo.atribuicoes[i]);
     }
-
-    int tabela[tamanho][tamanho];
-    memcpy(tabela, matrizOriginal, tamanho*tamanho*sizeof(int));
-}
-
-int* minimo(int **matriz, int tamanho, int modo)
-{
-    int i, j, *menor=NULL;
-
-    menor = (int*)malloc(tamanho*sizeof(int));
-    if(menor == NULL) {
-        printf("Erro_1\n");
-        return menor;
-    }
-    for(i=0; i < tamanho; i++) menor[i] = -1;
-    switch (modo)
-    {
-    //Menor da linha
-    case 1:
-        for(i=0; i < tamanho; i++) {
-            for (j=0; j < tamanho; j++) {
-                if(menor[i] > matriz[i][j]) menor[i] = matriz[i][j];
-            }
-        }
-        break;
-    //Menor da coluna
-    case 2:
-        for(i=0; i < tamanho; i++) {
-            for (j=0; j < tamanho; j++) {
-                if(menor[i] > matriz[j][i]) menor[i] = matriz[j][i];
-            }
-        }
-        break;
-    
-    default:
-        printf("Erro_2\n");
-        menor = NULL;
-        return menor;
-        break;
-    }
-    for(i=0; i < tamanho; i++) {
-        if(menor[i] == -1) { 
-            printf("Erro_3\n");
-            menor=NULL;
-            return menor;
-        }
-    }
-    return menor;
 }

@@ -1,7 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-
 #define TRUE 1
 #define FALSE 0
 
@@ -11,6 +7,23 @@ typedef struct
 {
     int resultado, *atribuicoes;
 }Jogada;
+
+int** alocaMatrizQuadrada(int tamanho) {
+    int **ptrM=NULL, i;
+    ptrM = (int**)malloc(tamanho * sizeof(int*));
+    if(ptrM == NULL) {
+        printf("Erro_5");
+        return alocaMatrizQuadrada(tamanho);
+    }
+    for(i=0; i < tamanho; i++) {
+        ptrM[i] = (int*)malloc(tamanho * sizeof(int));
+        if(ptrM[i] == NULL) {
+            printf("Erro_5");
+            return alocaMatrizQuadrada(tamanho);
+        }
+    }
+    return ptrM;
+}
 
 void copiaMatriz(int**, int**);
 void subtraiMinimoLinha(int**);
@@ -25,10 +38,10 @@ Jogada jogadaAutomatica(int **matrizOriginal, int tamanho, int nivel)
 {
     _tamanho = tamanho;
     Jogada jogada = {.resultado = -1, .atribuicoes = NULL};
-    int valores[_tamanho][_tamanho];
+    int **valores = alocaMatrizQuadrada(_tamanho);
     int aux0=0, aux1;
     int *numLinhas = &aux0;
-    int retas[_tamanho][_tamanho];
+    int **retas = alocaMatrizQuadrada(_tamanho);
     int linhas[_tamanho], colunasOcupadas[_tamanho];
 
     jogada.atribuicoes = (int*)malloc(_tamanho * sizeof(int));
@@ -37,7 +50,7 @@ Jogada jogadaAutomatica(int **matrizOriginal, int tamanho, int nivel)
         return jogada;
     }
     copiaMatriz(valores, matrizOriginal);
-
+    printf("aaaa");
     subtraiMinimoLinha(valores);
     subtraiMinimoColuna(valores);
     copiaMatriz(retas, cobreZeros(valores, numLinhas));
@@ -51,6 +64,8 @@ Jogada jogadaAutomatica(int **matrizOriginal, int tamanho, int nivel)
     for(aux1=0; aux1 < _tamanho; aux1++) {
         jogada.resultado += matrizOriginal[aux1][linhas[aux1]];
     }
+    free(retas);
+    free(valores);
     return jogada; 
 }
 
@@ -102,7 +117,7 @@ void subtraiMinimoColuna(int **matriz)
 
 int** cobreZeros(int **matriz, int *numLinhas)
 {
-    int retas[_tamanho][_tamanho], i, j;
+    int **retas= alocaMatrizQuadrada(_tamanho), i, j;
 
     *numLinhas = 0;
     for(i=0; i < _tamanho; i++) {
