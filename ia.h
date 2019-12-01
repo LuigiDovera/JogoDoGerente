@@ -1,3 +1,8 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+
 #define TRUE 1
 #define FALSE 0
 
@@ -23,7 +28,7 @@ int** alocaMatrizQuadrada(int tamanho) {
     for(i=0; i < tamanho; i++) {
         ptrM[i] = (int*)malloc(tamanho * sizeof(int));
         if(ptrM[i] == NULL) {
-            printf("Erro_5");
+            printf("Erro_6");
             return alocaMatrizQuadrada(tamanho);
         }
     }
@@ -34,7 +39,7 @@ int* alocaVetor(int tamanho) {
     int *ptrV=NULL, i;
     ptrV = (int*)malloc(tamanho * sizeof(int));
     if(ptrV == NULL) {
-        printf("Erro_6");
+        printf("Erro_7");
         return alocaVetor(tamanho);
     }
     return ptrV;
@@ -48,6 +53,7 @@ int direcao(int, int);
 void coloreVizinhos(int, int, int);
 void criaZerosExtras();
 int otimiza(int);
+void geraErro(int);
 
 Jogada jogadaAutomatica(int **matrizOriginal, int tamanho, int nivel)
 {
@@ -77,6 +83,8 @@ Jogada jogadaAutomatica(int **matrizOriginal, int tamanho, int nivel)
         cobreZeros();
     }
     otimiza(0);
+
+    geraErro(nivel);
 
     jogada.atribuicoes = _linhas;
     for(i=0; i < _tamanho; i++) {
@@ -228,4 +236,38 @@ int otimiza(int linha)
         }
     }
     return FALSE;
+}
+
+void geraErro(int nivel)
+{
+    srand(time(NULL));
+    int chance = rand() % 100;
+    printf("%d\n", chance);
+    int troca[] = {0, 0}, aux;
+    while(troca[0] == troca[1]) {
+        troca[0] = rand() % (_tamanho-1);
+        troca[1] = rand() % (_tamanho-1);
+    }
+
+    if(nivel == 3) {
+        if(chance > 95) {
+            aux = _linhas[troca[0]];
+            _linhas[troca[0]] = _linhas[troca[1]];
+            _linhas[troca[1]] = aux;
+        }
+    } else if(nivel == 2) {
+        if(chance > 75) {
+            aux = _linhas[troca[0]];
+            _linhas[troca[0]] = _linhas[troca[1]];
+            _linhas[troca[1]] = aux;
+        }
+    } else if(nivel == 1){
+        if(chance % 2 == 0) {
+            aux = _linhas[troca[0]];
+            _linhas[troca[0]] = _linhas[troca[1]];
+            _linhas[troca[1]] = aux;
+        }
+    } else {
+        printf("Erro_8");
+    }
 }

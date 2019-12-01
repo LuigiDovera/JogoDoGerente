@@ -2,9 +2,7 @@
 //http://www.hungarianalgorithm.com/examplehungarianalgorithm.php
 
 //Arquivo deve ser transformado em header
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+
 #include "ia.h"
 
 int main() {
@@ -26,7 +24,7 @@ int main() {
     m[3][2] = 98;
     m[3][3] = 23;
     Jogada jo;
-    jo = jogadaAutomatica(m, 4, 0);
+    jo = jogadaAutomatica(m, 4, 1);
     printf("%d\n", jo.resultado);
     for(int i=0; i < 4; i++) {
         printf("%d ", jo.atribuicoes[i]);
