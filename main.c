@@ -1,81 +1,36 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+//https://github.com/amirbawab/Hungarian-Algorithm/blob/master/Hungarian.java
+//http://www.hungarianalgorithm.com/examplehungarianalgorithm.php
 
-int arrlen(char *arr){
-  return sizeof(arr)/sizeof(arr[0]);
+//Arquivo deve ser transformado em header
+
+#include "ia.h"
+
+int main() {
+    /*int **m = alocaMatrizQuadrada(4);
+    m[0][0] = 82;
+    m[0][1] = 83;
+    m[0][2] = 69;
+    m[0][3] = 92;
+    m[1][0] = 77;
+    m[1][1] = 37;
+    m[1][2] = 49;
+    m[1][3] = 92;
+    m[2][0] = 11;
+    m[2][1] = 69;
+    m[2][2] = 5;
+    m[2][3] = 86;
+    m[3][0] = 8;
+    m[3][1] = 9;
+    m[3][2] = 98;
+    m[3][3] = 23;
+    Jogada jo;
+    jo = jogadaAutomatica(m, 4, 1);
+    printf("%d\n", jo.resultado);
+    for(int i=0; i < 4; i++) {
+        printf("%d ", jo.atribuicoes[i]);
+    }*/
+
+    int opcao;
+
+    printf("");
 }
-
-int main(void) {
-    FILE *pf = fopen("cenario/atribuicao_10.txt","r");
-    int tam = 301;
-    char string[tam];
-    const char split[2] = " ";
-    char *token;
-
-   //string de tamanho arbitrário para alocação de cada linha do arquivo
-  /*for(char c=getc(pf);c!=EOF;pf++){
-    printf("%c", c);
-  }
-  */
-    while(fgets(string, arrlen(string), pf) != NULL)
-        printf("%s", string);
-    fclose(pf);
-    pf = fopen("cenario/atribuicao_10.txt","r");
-
-    fgets(string, arrlen(string), pf); //recebendo o tamanho da matriz
-    int tam_matriz = atoi(string); //transformando string pra inteiro
-    printf("%d\n", tam_matriz);
-    int cenario[tam_matriz][tam_matriz];
-
-    for (int i=0; fgets(string, arrlen(string), pf) != NULL && i<tam_matriz; i++){
-        token = strtok(string, split);
-        printf("%s", string);
-
-        for(int j=0; token != NULL; j++){
-            cenario[i][j] = atoi(token);
-            token = strtok(NULL, split);
-        }
-
-
-    }
-    printf("\n");
-
-    /*
-  for (int i=0; ; i++){
-    if(!(fgets(string, arrlen(string), pf) != NULL && i<tam_matriz)){
-        break;
-    }
-    int k=0;
-    for (int j=0; j<tam_matriz; j++){
-      char strnum[4] = "";
-      /*if(string[k]==' '){
-        k++;
-      }
-      for(int l=0; string[k]!=' ';){
-        strnum[l] = string[k];
-        k++;
-        l++;
-      }
-      cenario[i][j] = atoi(strnum);
-      printf("%d ", cenario[i][j]);
-    }
-     printf("aaa\n");
-    printf("\n");
-  }
-  */
-
-
-
-    for (int i=0; i<tam_matriz; i++){
-        for (int j=0; j<tam_matriz; j++){
-            printf("%d ", cenario[i][j]);
-        }
-        printf("\n");
-    }
-
-
-    fclose(pf);
-    return 0;
-}
-
