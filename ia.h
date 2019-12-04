@@ -99,7 +99,7 @@ Jogada jogadaAutomatica(int **matrizOriginal, int tamanho, int nivel)
     free(_retas);
     free(_valores);
     free(_colunasOcupadas);
-    return jogada; 
+    return jogada;
 }
 
 void copiaMatriz(int **destino, int **origem)
@@ -153,7 +153,7 @@ void cobreZeros()
     int i, j;
 
     _numRetas = 0;
-    if(_retas != NULL) { 
+    if(_retas != NULL) {
         free(_retas);
         _retas = NULL;
     }

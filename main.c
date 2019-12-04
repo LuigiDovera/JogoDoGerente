@@ -2,10 +2,32 @@
 //http://www.hungarianalgorithm.com/examplehungarianalgorithm.php
 
 //Arquivo deve ser transformado em header
-
+#include <locale.h>
+#include "dados.h"
 #include "ia.h"
 
+
 int main() {
+    /*int opcaoMenu, opcaoJogador, opcaoCenario;
+    setlocale(LC_ALL, "Portuguese");
+    printf("Bem vindo ao Jogo da Atribuição!\n")
+    //printf("Quem vai jogar?\n   1 - Eu\n  2 - I.A.\n")
+    printf("    1 - JOGAR\n    ")
+    scanf("%d", &opcaoMenu);
+
+    while(1){
+        if(opcao==1){
+
+        }else if(opcao==2){
+
+        }else{
+            printf()
+        }
+    }
+
+    printf("");
+    */
+    //adicionando acentuação
     /*int **m = alocaMatrizQuadrada(4);
     m[0][0] = 82;
     m[0][1] = 83;
@@ -30,7 +52,11 @@ int main() {
         printf("%d ", jo.atribuicoes[i]);
     }*/
 
-    int opcao;
+    int ** mm = getCenario(100);
 
-    printf("");
+    Jogada jo = jogadaAutomatica(mm, 100, 1);
+    printf("%d\n", jo.resultado);
+    for(int i=0; i < 100; i++) {
+        printf("%d ", jo.atribuicoes[i]);
+    }
 }

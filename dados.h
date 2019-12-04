@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 #define MAX 99999
 #define cenario10 "cenario/atribuicao_10.txt"
 #define cenario20 "cenario/atribuicao_20.txt"
