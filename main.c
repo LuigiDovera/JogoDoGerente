@@ -10,7 +10,7 @@
 int main() {
     /*int opcaoMenu, opcaoJogador, opcaoCenario;
     setlocale(LC_ALL, "Portuguese");
-    printf("Bem vindo ao Jogo da Atribuição!\n")
+    printf("Bem vindo ao Jogo da Atribuiï¿½ï¿½o!\n")
     //printf("Quem vai jogar?\n   1 - Eu\n  2 - I.A.\n")
     printf("    1 - JOGAR\n    ")
     scanf("%d", &opcaoMenu);
@@ -27,7 +27,7 @@ int main() {
 
     printf("");
     */
-    //adicionando acentuação
+    //adicionando acentuaï¿½ï¿½o
     /*int **m = alocaMatrizQuadrada(4);
     m[0][0] = 82;
     m[0][1] = 83;
@@ -52,11 +52,11 @@ int main() {
         printf("%d ", jo.atribuicoes[i]);
     }*/
 
-    int ** mm = getCenario(100);
+    int ** mm = getCenario(50), i;
 
-    Jogada jo = jogadaAutomatica(mm, 100, 1);
+    Jogada jo = jogadaAutomatica(mm, 50, 1);
     printf("%d\n", jo.resultado);
-    for(int i=0; i < 100; i++) {
+    for( i=0; i < 50; i++) {
         printf("%d ", jo.atribuicoes[i]);
     }
 }
