@@ -13,8 +13,7 @@ int **_retas = NULL;
 int *_linhas = NULL;
 int *_colunasOcupadas = NULL;
 
-typedef struct
-{
+typedef struct{
     int resultado, *atribuicoes;
 }Jogada;
 
