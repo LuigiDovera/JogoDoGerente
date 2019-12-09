@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX 99999
+#define MAX 999999999
 #define cenario10 "cenario/atribuicao_10.txt"
 #define cenario20 "cenario/atribuicao_20.txt"
 #define cenario30 "cenario/atribuicao_30.txt"
@@ -21,15 +21,16 @@ Score * getRecorde(){
 		Score recordes;
 		Score *p = &recordes;
     if (pLeitura != NULL){
-			fscanf(pLeitura, "%d", &p->Score10);
-			fscanf(pLeitura, "%d", &p->Score20);
-			fscanf(pLeitura, "%d", &p->Score30);
-			fscanf(pLeitura, "%d", &p->Score50);
-			fscanf(pLeitura, "%d", &p->Score100);
+			fscanf(pLeitura, "%d\n", &(p->Score10));
+			fscanf(pLeitura, "%d\n", &(p->Score20));
+			fscanf(pLeitura, "%d\n", &(p->Score30));
+			fscanf(pLeitura, "%d\n", &(p->Score50));
+			fscanf(pLeitura, "%d\n", &(p->Score100));
 			fclose(pLeitura);
-			 return p;
+            return p;
 		}else{
 			printf("\nERRO\n");
+			fclose(pLeitura);
 			return NULL;
 		}
 }
@@ -42,10 +43,10 @@ void setRecorde(Score *p){
 		fprintf(pEscrita, "%d\n", p->Score30);
 		fprintf(pEscrita, "%d\n", p->Score50);
 		fprintf(pEscrita, "%d\n", p->Score100);
-		fclose(pEscrita);
 	}else{
 		printf("\nERRO\n");
 	}
+	fclose(pEscrita);
 }
 
 int ** getCenario(int cenario){
@@ -121,4 +122,16 @@ int ** getCenario(int cenario){
         printf("\nVALOR INFORMADO INVALIDO\n");
     }
     return Matriz;
+}
+
+void freeIntArray(int *arr, int tam){
+    for(int i=0; i<tam; i++)
+        free(arr[i]);
+    free(arr);
+}
+
+void freeIntMatriz(int **mat, int tam){
+    for(int i=0; i<tam; i++)
+        freeIntArray(mat[i], tam);
+    free(mat);
 }

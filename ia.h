@@ -241,7 +241,7 @@ void geraErro(int nivel)
 {
     srand(time(NULL));
     int chance = rand() % 100;
-    printf("%d\n", chance);
+    //printf("%d\n", chance);
     int troca[] = {0, 0}, aux;
     while(troca[0] == troca[1]) {
         troca[0] = rand() % (_tamanho-1);
