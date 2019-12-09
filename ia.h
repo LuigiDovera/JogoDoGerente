@@ -229,15 +229,7 @@ int otimiza(int linha)
     for(j=0; j < _tamanho; j++) {
         if(_valores[linha][j] == 0 && _colunasOcupadas[j] == 0) {
             _linhas[linha] = j;
-            /*printf("coloc\n");
-            for(int a=0; a < _tamanho; a++)
-                printf("%d ", _colunasOcupadas[a]);
-            printf("\n\n");*/
             _colunasOcupadas[j] = 1;
-            /*printf("linhas\n");
-            for(int a=0; a < _tamanho; a++)
-                printf("%d ", _linhas[a]);
-            printf("\n\n");*/
             if(otimiza(linha+1))
                 return TRUE;
             _colunasOcupadas[j] = 0;
@@ -248,7 +240,6 @@ int otimiza(int linha)
 
 void geraErro(int nivel)
 {
-    //gambiarra
     int check1=FALSE, check2=TRUE, c=_tamanho-1, atv, i;
     for(i=0; i < _tamanho; i++) {
         if(_linhas[i]==0)

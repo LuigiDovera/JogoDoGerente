@@ -6,17 +6,101 @@
 
 #define TRUE 1
 #define FALSE 0
-#define MAX INT_MAX
+#define MAXI 99999
 
+typedef struct
+{
+    int resultado, *atribuicoes;
+}Jogada;
+
+Jogada jogada = {.resultado = -1, .atribuicoes = NULL};
 int _tamanho;
-int _contaCaminho;
+int _contaCaminho = 0;
 int caminhoLinha0;
 int caminhoColuna0;
+int **_matrizOriginal = NULL;
 int **_valores = NULL;
 int **_marcas = NULL;
 int **_caminho = NULL;
 int *_marcaLinha = NULL;
 int *_marcaColuna = NULL;
+
+int** alocaMatrizQuadrada(int tamanho) {
+    int **ptrM=NULL, i;
+    ptrM = (int**)malloc(tamanho * sizeof(int*));
+    if(ptrM == NULL) {
+        printf("Erro_5");
+        return alocaMatrizQuadrada(tamanho);
+    }
+    for(i=0; i < tamanho; i++) {
+        ptrM[i] = (int*)malloc(tamanho * sizeof(int));
+        if(ptrM[i] == NULL) {
+            printf("Erro_6");
+            return alocaMatrizQuadrada(tamanho);
+        }
+    }
+    return ptrM;
+}
+
+int* alocaVetor(int tamanho) {
+    int *ptrV=NULL, i;
+    ptrV = (int*)malloc(tamanho * sizeof(int));
+    if(ptrV == NULL) {
+        printf("Erro_7");
+        return alocaVetor(tamanho);
+    }
+    return ptrV;
+}
+
+void copiaMatriz(int **destino, int **origem)
+{
+    int i, j;
+    for(i=0; i < _tamanho; i++) {
+        for(j=0; j < _tamanho; j++) {
+            destino[i][j] = origem[i][j];
+        }
+    }
+}
+
+void passoUm();
+void passoDois();
+void passoTres();
+void passoQuatro();
+void passoCinco();
+void passoSeis();
+void concluido();
+void geraErro(int);
+
+Jogada jogadaAutomatica(int **matrizOriginal, int tamanho, int nivel)
+{
+    int i, j;
+
+    _tamanho = tamanho;
+    _matrizOriginal = alocaMatrizQuadrada(_tamanho);
+    _valores = alocaMatrizQuadrada(_tamanho);
+    _marcas = alocaMatrizQuadrada(_tamanho);
+    //_caminho = alocaMatrizQuadrada(_tamanho);
+    _marcaLinha = alocaVetor(_tamanho);
+    _marcaColuna = alocaVetor(_tamanho);
+    jogada.atribuicoes = alocaVetor(_tamanho);
+
+    _caminho = (int**)malloc(2*_tamanho*sizeof(int*)+1);
+    for(i=0; i < ((2*_tamanho)+1); i++);
+        _caminho[i] = (int*)malloc(_tamanho*sizeof(int));
+    
+    copiaMatriz(_matrizOriginal, matrizOriginal);
+    copiaMatriz(_valores, matrizOriginal);
+    for(i=0; i < _tamanho; i++) {
+        _marcaLinha[i] = 0;
+        _marcaColuna[i] = 0;
+        for(j=0; j < _tamanho; j++) {
+            _marcas[i][j] = 0;
+        }
+    }
+    passoUm();
+    geraErro(nivel);
+    return jogada;
+}
 
 void passoUm()
 {
@@ -77,80 +161,6 @@ void passoTres()
     }
 }
 
-void passoQuatro()
-{
-    int aux1=-1, aux2=-1, feito = FALSE;
-    int *linha=&aux1, *coluna=&aux2;
-
-    while(feito == FALSE) {
-        achaZero(linha, coluna);
-        if(*linha == -1) {
-            feito = TRUE;
-            passoSeis();
-        } else {
-            _marcas[(*linha)][(*coluna)] = 2;
-            if(marcaNaLinha((*linha)) == 1) { //checar true false
-                achaMarcaNaLinha((*linha), coluna);
-                _marcaLinha[(*linha)] = 1;
-                _marcaColuna[(*coluna)] = 0;
-            } else {
-                feito = TRUE;
-                passoCinco();
-                caminhoLinha0 = *linha;
-                caminhoColuna0 = *coluna;
-            }
-        }
-    }
-}
-
-void passoCinco()
-{
-    int aux1=-1, aux2=-1, feito = FALSE;
-    int *linha=&aux1, *coluna=&aux2;
-
-    _contaCaminho = 1;
-    _caminho[_contaCaminho-1][0] = caminhoLinha0;
-    _caminho[_contaCaminho-1][1] = caminhoColuna0;
-
-    while(feito == FALSE) {
-        achaMarcaNaColuna(_caminho[_contaCaminho-1][1], linha);
-        if(*linha > -1) {
-            _contaCaminho++;
-            _caminho[_contaCaminho-1][0] = *linha;
-            _caminho[_contaCaminho-1][1] = _caminho[_contaCaminho-2][1];
-        } else {
-            feito = TRUE;
-        }
-        if(feito == FALSE) {
-            achaEspecialNaLinha( _caminho[_contaCaminho-1][0], coluna);
-            _contaCaminho++;
-            _caminho[_contaCaminho-1][0] = _caminho[_contaCaminho-2][0];
-            _caminho[_contaCaminho-1][1] = *coluna;
-        }
-    }
-    melhoraCaminho();
-    limpaMarcas();
-    limpaEspeciais();
-    passoTres();
-}
-
-void passoSeis()
-{
-    int aux = MAX, i, j;
-    int *menor = &aux;
-
-    achaMenor(menor);
-    for(i=0; i < _tamanho; i++) {
-        for(j=0; j < _tamanho; j++) {
-            if(_marcaLinha[i] == 1)
-                _valores[i][j] += *menor;
-            if(_marcaColuna[j] == 0)
-                _valores[i][j] -= *menor;
-        }
-    }
-    passoQuatro();
-}
-
 void achaZero(int *linha, int *coluna)
 {
     int l=0, c, feito = FALSE;
@@ -161,7 +171,7 @@ void achaZero(int *linha, int *coluna)
     while(feito == FALSE) {
         c = 0;
         for(;;) {
-            if(_valores[l][c] == 0 && _marcaLinha[l] && _marcaColuna[c] == 0) {
+            if(_valores[l][c] == 0 && _marcaLinha[l] == 0 && _marcaColuna[c] == 0) {
                 *linha = l;
                 *coluna = c;
                 feito = TRUE;
@@ -195,6 +205,32 @@ void achaMarcaNaLinha(int linha, int *coluna)
     for(j=0; j < _tamanho; j++)
         if(_marcas[linha][j] == 1)
             *coluna = j;
+}
+
+void passoQuatro()
+{
+    int aux1=-1, aux2=-1, feito = FALSE;
+    int *linha=&aux1, *coluna=&aux2;
+
+    while(feito == FALSE) {
+        achaZero(linha, coluna);
+        if(*linha == -1) {
+            feito = TRUE;
+            passoSeis();
+        } else {
+            _marcas[(*linha)][(*coluna)] = 2;
+            if(marcaNaLinha((*linha)) == TRUE) { //checar true false
+                achaMarcaNaLinha((*linha), coluna);
+                _marcaLinha[(*linha)] = 1;
+                _marcaColuna[(*coluna)] = 0;
+            } else {
+                feito = TRUE;
+                passoCinco();
+                caminhoLinha0 = *linha;
+                caminhoColuna0 = *coluna;
+            }
+        }
+    }
 }
 
 void achaMarcaNaColuna(int coluna, int *linha)
@@ -251,6 +287,37 @@ void limpaEspeciais()
     }
 }
 
+void passoCinco()
+{
+    int aux1=-1, aux2=-1, feito = FALSE;
+    int *linha=&aux1, *coluna=&aux2;
+
+    _contaCaminho = 1;
+    _caminho[_contaCaminho-1][0] = caminhoLinha0;
+    _caminho[_contaCaminho-1][1] = caminhoColuna0;
+
+    while(feito == FALSE) {
+        achaMarcaNaColuna(_caminho[_contaCaminho-1][1], linha);
+        if(*linha > -1) {
+            _contaCaminho++;
+            _caminho[_contaCaminho-1][0] = *linha;
+            _caminho[_contaCaminho-1][1] = _caminho[_contaCaminho-2][1];
+        } else {
+            feito = TRUE;
+        }
+        if(feito == FALSE) {
+            achaEspecialNaLinha( _caminho[_contaCaminho-1][0], coluna);
+            _contaCaminho++;
+            _caminho[_contaCaminho-1][0] = _caminho[_contaCaminho-2][0];
+            _caminho[_contaCaminho-1][1] = *coluna;
+        }
+    }
+    melhoraCaminho();
+    limpaMarcas();
+    limpaEspeciais();
+    passoTres();
+}
+
 void achaMenor(int *menor)
 {
     int i, j;
@@ -261,5 +328,69 @@ void achaMenor(int *menor)
                 if(*menor > _valores[i][j])
                     *menor = _valores[i][j];
         }
+    }
+}
+
+void passoSeis()
+{
+    int aux = MAXI, i, j;
+    int *menor = &aux;
+
+    achaMenor(menor);
+    for(i=0; i < _tamanho; i++) {
+        for(j=0; j < _tamanho; j++) {
+            if(_marcaLinha[i] == 1)
+                _valores[i][j] += *menor;
+            if(_marcaColuna[j] == 0)
+                _valores[i][j] -= *menor;
+        }
+    }
+    passoQuatro();
+}
+
+void concluido()
+{
+    int i, j;
+    jogada.resultado++;
+    for(i=0; i < _tamanho; i++) {
+        for(j=0; j < _tamanho; j++) {
+            if(_marcas[i][j] == 1) {
+                jogada.atribuicoes[i] = j;
+                jogada.resultado += _matrizOriginal[i][j];
+            }
+        }
+    }
+}
+
+void geraErro(int nivel)
+{
+    srand(time(NULL));
+    int chance = rand() % 100;
+    int troca[] = {0, 0}, aux;
+    while(troca[0] == troca[1]) {
+        troca[0] = rand() % (_tamanho-1);
+        troca[1] = rand() % (_tamanho-1);
+    }
+
+    if(nivel == 3) {
+        if(chance > 95) {
+            aux = jogada.atribuicoes[troca[0]];
+            jogada.atribuicoes[troca[0]] = jogada.atribuicoes[troca[1]];
+            jogada.atribuicoes[troca[1]] = aux;
+        }
+    } else if(nivel == 2) {
+        if(chance > 75) {
+            aux = jogada.atribuicoes[troca[0]];
+            jogada.atribuicoes[troca[0]] = jogada.atribuicoes[troca[1]];
+            jogada.atribuicoes[troca[1]] = aux;
+        }
+    } else if(nivel == 1){
+        if(chance % 2 == 0) {
+            aux = jogada.atribuicoes[troca[0]];
+            jogada.atribuicoes[troca[0]] = jogada.atribuicoes[troca[1]];
+            jogada.atribuicoes[troca[1]] = aux;
+        }
+    } else {
+        printf("Erro_8");
     }
 }

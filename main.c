@@ -53,16 +53,12 @@ int main() {
     }*/
 
     int ** mm = getCenario(10), i;
-    for(i=0; i < 10; i++) {
-        for(int a=0; a < 10; a++) {
-            printf("%d ", mm[i][a]);
-        }
-        printf("\n");
-    }
 
     Jogada jo = jogadaAutomatica(mm, 10, 1);
     printf("%d\n", jo.resultado);
     for( i=0; i < 10; i++) {
         printf("%d ", jo.atribuicoes[i]);
     }
+
+    return 0;
 }
