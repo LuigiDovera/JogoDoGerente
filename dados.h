@@ -121,6 +121,7 @@ int ** getCenario(int cenario){
     }else{
         printf("\nVALOR INFORMADO INVALIDO\n");
     }
+    
     return Matriz;
 }
 
