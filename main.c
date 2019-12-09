@@ -103,7 +103,7 @@ int main() {
                     system("pause");
 
                     freeIntMatriz(mm, opcaoCenario);
-                    freeIntArray(jo->atribuicoes, opcaoCenario);
+                    free(jo->atribuicoes);
                     free(jo);
                     free(p);
 
@@ -138,7 +138,7 @@ int main() {
                             BOOL = FALSE;
 
                             freeIntMatriz(mm, opcaoCenario);
-                            freeIntArray(jo.atribuicoes, opcaoCenario);
+                            free(jo.atribuicoes);
 
                             break;
                         }else{

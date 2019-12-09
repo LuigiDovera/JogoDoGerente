@@ -121,18 +121,12 @@ int ** getCenario(int cenario){
     }else{
         printf("\nVALOR INFORMADO INVALIDO\n");
     }
-    
-    return Matriz;
-}
 
-void freeIntArray(int *arr, int tam){
-    for(int i=0; i<tam; i++)
-        free(arr[i]);
-    free(arr);
+    return Matriz;
 }
 
 void freeIntMatriz(int **mat, int tam){
     for(int i=0; i<tam; i++)
-        freeIntArray(mat[i], tam);
+        free(mat[i]);
     free(mat);
 }
