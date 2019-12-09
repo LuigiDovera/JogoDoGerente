@@ -84,48 +84,6 @@ Jogada jogadaAutomatica(int **matrizOriginal, int tamanho, int nivel)
     }
     otimiza(0);
 
-    //gambiarra
-    int check1=FALSE, check2=TRUE, c=_tamanho-1, atv;
-    for(i=0; i < _tamanho; i++) {
-        if(_linhas[i]==0)
-            if(_linhas[i+1] != 0) {
-                break;
-            } else {
-                check1 = TRUE;
-                break;
-            }
-    }
-    srand(time(NULL));
-    if(check1 == FALSE) {
-        while(_linhas[c] == 0) {
-            atv = rand() % _tamanho;
-            for(i=0; i < _tamanho; i++) {
-                if(atv == _linhas[i]) {
-                    check2=FALSE;
-                    break;
-                }
-            }
-            if(check2 == TRUE) {
-                _linhas[c--] = atv;
-            }
-            check2 = TRUE;
-        }
-    } else {
-        while(_linhas[c] == 0 && _linhas[c-1] == 0) {
-            atv = rand() % _tamanho;
-            for(i=0; i < _tamanho; i++) {
-                if(atv == _linhas[i]) {
-                    check2=FALSE;
-                    break;
-                }
-            }
-            if(check2 == TRUE) {
-                _linhas[c--] = atv;
-            }
-            check2 = TRUE;
-        }
-    }
-
     geraErro(nivel);
 
     jogada.atribuicoes = _linhas;
@@ -290,6 +248,48 @@ int otimiza(int linha)
 
 void geraErro(int nivel)
 {
+    //gambiarra
+    int check1=FALSE, check2=TRUE, c=_tamanho-1, atv, i;
+    for(i=0; i < _tamanho; i++) {
+        if(_linhas[i]==0)
+            if(_linhas[i+1] != 0) {
+                break;
+            } else {
+                check1 = TRUE;
+                break;
+            }
+    }
+    srand(time(NULL));
+    if(check1 == FALSE) {
+        while(_linhas[c] == 0) {
+            atv = rand() % _tamanho;
+            for(i=0; i < _tamanho; i++) {
+                if(atv == _linhas[i]) {
+                    check2=FALSE;
+                    break;
+                }
+            }
+            if(check2 == TRUE) {
+                _linhas[c--] = atv;
+            }
+            check2 = TRUE;
+        }
+    } else {
+        while(_linhas[c] == 0 && _linhas[c-1] == 0) {
+            atv = rand() % _tamanho;
+            for(i=0; i < _tamanho; i++) {
+                if(atv == _linhas[i]) {
+                    check2=FALSE;
+                    break;
+                }
+            }
+            if(check2 == TRUE) {
+                _linhas[c--] = atv;
+            }
+            check2 = TRUE;
+        }
+    }
+
     srand(time(NULL));
     int chance = rand() % 100;
     int troca[] = {0, 0}, aux;
