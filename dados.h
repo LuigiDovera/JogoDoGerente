@@ -18,7 +18,7 @@ typedef struct{
 
 Score  getRecorde(){
     FILE *pLeitura = fopen("score.txt", "r");
-		Score p;
+	Score p;
     if (pLeitura != NULL){
 			fscanf(pLeitura, "%d", &p.Score10);
 			fscanf(pLeitura, "%d", &p.Score20);

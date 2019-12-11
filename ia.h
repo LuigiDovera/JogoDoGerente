@@ -238,7 +238,9 @@ int otimiza(int linha)
 }
 
 void geraErro(int nivel)
-{
+{   if(nivel == 0)
+        return;
+    
     int check1=FALSE, check2=TRUE, c=_tamanho-1, atv, i;
     for(i=0; i < _tamanho; i++) {
         if(_linhas[i]==0)

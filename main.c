@@ -3,6 +3,7 @@
 
 //Arquivo deve ser transformado em header
 #include <locale.h>
+#include <time.h>
 #include "dados.h"
 #include "ia.h"
 
@@ -56,6 +57,7 @@ int main() {
                     for(int i=0; i<opcaoCenario; i++)
                         jo->atribuicoes[i] = -1;
 
+                    clock_t timer = clock();
                     for(int i=0; i<opcaoCenario; i++){
                         int BOOL;
                         do{
@@ -79,12 +81,14 @@ int main() {
                     }
                     printf("\n");
 
+                    int msec = (clock() - timer)*1000/CLOCKS_PER_SEC;
+
                     for(int i=0; i<opcaoCenario; i++){
                         jo->resultado += mm[i][jo->atribuicoes[i]];
                     }
 
-                    printf("Sua pontua��o: %d\n", jo->resultado);
-
+                    printf("Sua pontua��o: %d, em %d segundos\n", jo->resultado, msec/1000);
+                    jo->resultado += msec/1000;
                     Score p = getRecorde();
 
                     if(opcaoCenario==10 && jo->resultado<p.Score10)
@@ -119,9 +123,9 @@ int main() {
             Jogada joIa;
             do{
                 BOOL = TRUE;
-                printf("Escolha o n�vel de precis�o da IA: 1-Alto, 2-M�dio, 3-Baixo\n");
+                printf("Escolha o n�vel de precis�o da IA: 1-Baixp, 2-M�dio, 3-Alto\n");
                 scanf("%d", &opcaoIA);
-                if(opcaoIA==1 || opcaoIA==2 || opcaoIA==3){
+                if(opcaoIA==1 || opcaoIA==2 || opcaoIA==3 || opcaoIA==0){
                     while(TRUE){
                         printf("Escolha uma Fase: 10, 20, 30 ou 50.\n");
                         scanf("%d", &opcaoCenario);
@@ -152,8 +156,7 @@ int main() {
             }while(BOOL);
 
             while(TRUE){
-                //printf("Escolha uma Fase: 10, 20, 30 ou 50.\n");
-                //scanf("%d", &opcaoCenario);
+
                 if(opcaoCenario==10 || opcaoCenario==20 || opcaoCenario==30 || opcaoCenario==50 || opcaoCenario==100){
                     system("cls");
                     mm = getCenario(opcaoCenario);
@@ -238,9 +241,9 @@ int main() {
             int BOOL;
             do{
                 BOOL = TRUE;
-                printf("Escolha o n�vel de precis�o da IA: 1-Alto, 2-M�dio, 3-Baixo\n");
+                printf("Escolha o n�vel de precis�o da IA: 1-Baixo, 2-M�dio, 3-Alto\n");
                 scanf("%d", &opcaoIA);
-                if(opcaoIA==1 || opcaoIA==2 || opcaoIA==3){
+                if(opcaoIA==1 || opcaoIA==2 || opcaoIA==3 || opcaoIA==0){
                     while(TRUE){
                         printf("Escolha uma Fase: 10, 20, 30 ou 50.\n");
                         scanf("%d", &opcaoCenario);
