@@ -21,11 +21,11 @@ Score * getRecorde(){
 		Score recordes;
 		Score *p = &recordes;
     if (pLeitura != NULL){
-			fscanf(pLeitura, "%d\n", &(p->Score10));
-			fscanf(pLeitura, "%d\n", &(p->Score20));
-			fscanf(pLeitura, "%d\n", &(p->Score30));
-			fscanf(pLeitura, "%d\n", &(p->Score50));
-			fscanf(pLeitura, "%d\n", &(p->Score100));
+			fscanf(pLeitura, "%d", &p.Score10);
+			fscanf(pLeitura, "%d", &p.Score20);
+			fscanf(pLeitura, "%d", &p.Score30);
+			fscanf(pLeitura, "%d", &p.Score50);
+			fscanf(pLeitura, "%d", &p.Score100);
 			fclose(pLeitura);
             return p;
 		}else{
@@ -38,11 +38,11 @@ Score * getRecorde(){
 void setRecorde(Score *p){
 	FILE *pEscrita = fopen("score.txt","w");
 	if (pEscrita != NULL){
-		fprintf(pEscrita, "%d\n", p->Score10);
-		fprintf(pEscrita, "%d\n", p->Score20);
-		fprintf(pEscrita, "%d\n", p->Score30);
-		fprintf(pEscrita, "%d\n", p->Score50);
-		fprintf(pEscrita, "%d\n", p->Score100);
+		fprintf(pEscrita, "%d\n", p.Score10);
+		fprintf(pEscrita, "%d\n", p.Score20);
+		fprintf(pEscrita, "%d\n", p.Score30);
+		fprintf(pEscrita, "%d\n", p.Score50);
+		fprintf(pEscrita, "%d\n", p.Score100);
 	}else{
 		printf("\nERRO\n");
 	}

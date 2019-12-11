@@ -22,12 +22,12 @@ int main() {
     while(TRUE){
         system("cls");
         printf("Bem vindo ao Jogo da Atribuição!\n");
-        printf("    1 - JOGAR\n    2 - I.A.\n    3 - RECORDE\n    4 - SAIR\n\n");
+        printf("    1 - JOGAR SOZINHO\n    2 - VERSUS\n    3 - I.A.\n    4 - RECORDE\n    5 - SAIR\n\n");
         scanf("%d", &opcaoMenu);
 
         if(opcaoMenu==1){
             while(TRUE){
-                printf("Escolha uma Fase: 10, 20, 30 ou 50.\n");
+                printf("Escolha uma Fase: 10, 20, 30, 50 ou 100.\n");
                 scanf("%d", &opcaoCenario);
                 if(opcaoCenario==10 || opcaoCenario==20 || opcaoCenario==30 || opcaoCenario==50 || opcaoCenario==100){
                     system("cls");
@@ -85,18 +85,18 @@ int main() {
 
                     printf("Sua pontuação: %d\n", jo->resultado);
 
-                    Score *p = getRecorde();
+                    Score p = getRecorde();
 
                     if(opcaoCenario==10 && jo->resultado<p->Score10)
-                        p->Score10 = jo->resultado;
+                        p.Score10 = jo->resultado;
                     else if(opcaoCenario==20 && jo->resultado<p->Score20)
-                        p->Score20 = jo->resultado;
+                        p.Score20 = jo->resultado;
                     else if(opcaoCenario==30 && jo->resultado<p->Score30)
-                        p->Score30 = jo->resultado;
+                        p.Score30 = jo->resultado;
                     else if(opcaoCenario==50 && jo->resultado<p->Score50)
-                        p->Score50 = jo->resultado;
+                        p.Score50 = jo->resultado;
                     else if(opcaoCenario==100 && jo->resultado<p->Score100)
-                        p->Score100 = jo->resultado;
+                        p.Score100 = jo->resultado;
 
                     setRecorde(p);
 
@@ -105,7 +105,6 @@ int main() {
                     freeIntMatriz(mm, opcaoCenario);
                     free(jo->atribuicoes);
                     free(jo);
-                    free(p);
 
                     break;
                 }else{
@@ -116,6 +115,8 @@ int main() {
 
             }
         }else if(opcaoMenu==2){
+
+        }else if(opcaoMenu==3){
             int BOOL;
             do{
                 BOOL = TRUE;
@@ -126,7 +127,7 @@ int main() {
                         printf("Escolha uma Fase: 10, 20, 30 ou 50.\n");
                         scanf("%d", &opcaoCenario);
                         printf("\n");
-                        if(opcaoCenario==10 || opcaoCenario==20 || opcaoCenario==30 || opcaoCenario==50 || opcaoCenario==100){
+                        if(opcaoCenario==10 || opcaoCenario==20 || opcaoCenario==30 || opcaoCenario==50){
                             int ** mm = getCenario(opcaoCenario);
 
                             Jogada jo = jogadaAutomatica(mm, opcaoCenario, 1);
@@ -154,16 +155,16 @@ int main() {
                 }
             }while(BOOL);
 
-        }else if(opcaoMenu==3){
-            Score *p = getRecorde();
-            printf("Melhor pontuação no cenário 10: %d\n", p->Score10);
-            printf("Melhor pontuação no cenário 20: %d\n", p->Score20);
-            printf("Melhor pontuação no cenário 30: %d\n", p->Score30);
-            printf("Melhor pontuação no cenário 50: %d\n", p->Score50);
-            printf("Melhor pontuação no cenário 100: %d\n", p->Score100);
+        }else if(opcaoMenu==4){
+            Score p = getRecorde();
+            printf("Melhor pontuação no cenário 10: %d\n", p.Score10);
+            printf("Melhor pontuação no cenário 20: %d\n", p.Score20);
+            printf("Melhor pontuação no cenário 30: %d\n", p.Score30);
+            printf("Melhor pontuação no cenário 50: %d\n", p.Score50);
+            printf("Melhor pontuação no cenário 100: %d\n", p.Score100);
             system("pause");
 
-        }else if(opcaoMenu==4){
+        }else if(opcaoMenu==5){
             break;
         }else{
             printf("Opção inválida. Escolha novamente.\n");
