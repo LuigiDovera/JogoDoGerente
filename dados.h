@@ -16,10 +16,9 @@ typedef struct{
 	int Score100;
 }Score;
 
-Score * getRecorde(){
+Score  getRecorde(){
     FILE *pLeitura = fopen("score.txt", "r");
-		Score recordes;
-		Score *p = &recordes;
+		Score p;
     if (pLeitura != NULL){
 			fscanf(pLeitura, "%d", &p.Score10);
 			fscanf(pLeitura, "%d", &p.Score20);
@@ -31,11 +30,11 @@ Score * getRecorde(){
 		}else{
 			printf("\nERRO\n");
 			fclose(pLeitura);
-			return NULL;
+			return;
 		}
 }
 
-void setRecorde(Score *p){
+void setRecorde(Score p){
 	FILE *pEscrita = fopen("score.txt","w");
 	if (pEscrita != NULL){
 		fprintf(pEscrita, "%d\n", p.Score10);

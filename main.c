@@ -87,15 +87,15 @@ int main() {
 
                     Score p = getRecorde();
 
-                    if(opcaoCenario==10 && jo->resultado<p->Score10)
+                    if(opcaoCenario==10 && jo->resultado<p.Score10)
                         p.Score10 = jo->resultado;
-                    else if(opcaoCenario==20 && jo->resultado<p->Score20)
+                    else if(opcaoCenario==20 && jo->resultado<p.Score20)
                         p.Score20 = jo->resultado;
-                    else if(opcaoCenario==30 && jo->resultado<p->Score30)
+                    else if(opcaoCenario==30 && jo->resultado<p.Score30)
                         p.Score30 = jo->resultado;
-                    else if(opcaoCenario==50 && jo->resultado<p->Score50)
+                    else if(opcaoCenario==50 && jo->resultado<p.Score50)
                         p.Score50 = jo->resultado;
-                    else if(opcaoCenario==100 && jo->resultado<p->Score100)
+                    else if(opcaoCenario==100 && jo->resultado<p.Score100)
                         p.Score100 = jo->resultado;
 
                     setRecorde(p);
