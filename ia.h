@@ -13,8 +13,7 @@ int **_retas = NULL;
 int *_linhas = NULL;
 int *_colunasOcupadas = NULL;
 
-typedef struct
-{
+typedef struct{
     int resultado, *atribuicoes;
 }Jogada;
 
@@ -239,7 +238,9 @@ int otimiza(int linha)
 }
 
 void geraErro(int nivel)
-{
+{   if(nivel == 0)
+        return;
+    
     int check1=FALSE, check2=TRUE, c=_tamanho-1, atv, i;
     for(i=0; i < _tamanho; i++) {
         if(_linhas[i]==0)
@@ -283,6 +284,9 @@ void geraErro(int nivel)
 
     srand(time(NULL));
     int chance = rand() % 100;
+
+    //printf("%d\n", chance);
+
     int troca[] = {0, 0}, aux;
     while(troca[0] == troca[1]) {
         troca[0] = rand() % (_tamanho-1);

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX 99999
+#define MAX 999999999
 #define cenario10 "cenario/atribuicao_10.txt"
 #define cenario20 "cenario/atribuicao_20.txt"
 #define cenario30 "cenario/atribuicao_30.txt"
@@ -16,36 +16,36 @@ typedef struct{
 	int Score100;
 }Score;
 
-Score * getRecorde(){
+Score  getRecorde(){
     FILE *pLeitura = fopen("score.txt", "r");
-		Score recordes;
-		Score *p = &recordes;
+	Score p;
     if (pLeitura != NULL){
-			fscanf(pLeitura, "%d", &p->Score10);
-			fscanf(pLeitura, "%d", &p->Score20);
-			fscanf(pLeitura, "%d", &p->Score30);
-			fscanf(pLeitura, "%d", &p->Score50);
-			fscanf(pLeitura, "%d", &p->Score100);
+			fscanf(pLeitura, "%d", &p.Score10);
+			fscanf(pLeitura, "%d", &p.Score20);
+			fscanf(pLeitura, "%d", &p.Score30);
+			fscanf(pLeitura, "%d", &p.Score50);
+			fscanf(pLeitura, "%d", &p.Score100);
 			fclose(pLeitura);
-			 return p;
+            return p;
 		}else{
 			printf("\nERRO\n");
-			return NULL;
+			fclose(pLeitura);
+			return;
 		}
 }
 
-void setRecorde(Score *p){
+void setRecorde(Score p){
 	FILE *pEscrita = fopen("score.txt","w");
 	if (pEscrita != NULL){
-		fprintf(pEscrita, "%d\n", p->Score10);
-		fprintf(pEscrita, "%d\n", p->Score20);
-		fprintf(pEscrita, "%d\n", p->Score30);
-		fprintf(pEscrita, "%d\n", p->Score50);
-		fprintf(pEscrita, "%d\n", p->Score100);
-		fclose(pEscrita);
+		fprintf(pEscrita, "%d\n", p.Score10);
+		fprintf(pEscrita, "%d\n", p.Score20);
+		fprintf(pEscrita, "%d\n", p.Score30);
+		fprintf(pEscrita, "%d\n", p.Score50);
+		fprintf(pEscrita, "%d\n", p.Score100);
 	}else{
 		printf("\nERRO\n");
 	}
+	fclose(pEscrita);
 }
 
 int ** getCenario(int cenario){
@@ -120,6 +120,12 @@ int ** getCenario(int cenario){
     }else{
         printf("\nVALOR INFORMADO INVALIDO\n");
     }
-    
+
     return Matriz;
+}
+
+void freeIntMatriz(int **mat, int tam){
+    for(int i=0; i<tam; i++)
+        free(mat[i]);
+    free(mat);
 }
